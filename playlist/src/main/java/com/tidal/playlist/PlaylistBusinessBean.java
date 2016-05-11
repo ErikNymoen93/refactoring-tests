@@ -31,20 +31,23 @@ public class PlaylistBusinessBean {
             TrackPlayList playList = playlistDaoBean.getPlaylistByUUID(uuid, userId);
 
             //We do not allow > 500 tracks in new playlists
-            if (playList.getNrOfTracks() + tracksToAdd.size() > 500) {
+            int nrOfTracks = playList.getNrOfTracks();
+			if (nrOfTracks + tracksToAdd.size() > 500) {
                 throw new PlaylistException("Playlist cannot have more than " + 500 + " tracks");
             }
 
             // The index is out of bounds, put it in the end of the list.
-            if (toIndex > playList.getPlayListTracksSize() || toIndex == -1) {
-                toIndex = playList.getPlayListTracksSize();
+            int playListTracksSize = playList.getPlayListTracksSize();
+			if (toIndex > playListTracksSize || toIndex == -1) {
+                toIndex = playListTracksSize;
             }
 
-            if (!validateIndexes(toIndex, playList.getNrOfTracks())) {
+            if (!validateIndexes(toIndex, nrOfTracks)) {
                 return Collections.EMPTY_LIST;
             }
 
-            Set<PlayListTrack> originalSet = playList.getPlayListTracks();
+            Set<PlayListTrack> playListTracks = playList.getPlayListTracks();
+			Set<PlayListTrack> originalSet = playListTracks;
             List<PlayListTrack> original;
             if (originalSet == null || originalSet.size() == 0)
                 original = new ArrayList<PlayListTrack>();
@@ -73,8 +76,8 @@ public class PlaylistBusinessBean {
                 track.setIndex(i++);
             }
 
-            playList.getPlayListTracks().clear();
-            playList.getPlayListTracks().addAll(original);
+            playListTracks.clear();
+            playListTracks.addAll(original);
             playList.setNrOfTracks(original.size());
 
             return added;
@@ -90,7 +93,9 @@ public class PlaylistBusinessBean {
     }
 
     private float addTrackDurationToPlaylist(TrackPlayList playList, Track track) {
-        return (track != null ? track.getDuration() : 0)
-                + (playList != null && playList.getDuration() != null ? playList.getDuration() : 0);
+        int trackDuration = track.getDuration();
+		int playlistDuration = playList.getDuration();
+		return (track != null ? trackDuration : 0)
+                + (playList != null && playlistDuration != null ? playlistDuration : 0);
     }
 }
