@@ -93,9 +93,7 @@ public class PlaylistBusinessBean {
     }
 
     private float addTrackDurationToPlaylist(TrackPlayList playList, Track track) {
-        int trackDuration = track.getDuration();
-		int playlistDuration = playList.getDuration();
-		return (track != null ? trackDuration : 0)
-                + (playList != null && playlistDuration != null ? playlistDuration : 0);
+        return (track != null ? track.getDuration() : 0)
+                + (playList != null && playList.getDuration() != null ? playList.getDuration() : 0);
     }
 }
