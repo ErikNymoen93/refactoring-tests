@@ -62,7 +62,8 @@ public class PlaylistBusinessBean {
                 PlayListTrack playlistTrack = new PlayListTrack();
                 playlistTrack.setTrack(track);
                 playlistTrack.setTrackPlaylist(playList);
-                playlistTrack.setTrackArtistId(track.getArtistId());
+                int artistId = track.getArtistId();
+		playlistTrack.setTrackArtistId(artistId);
                 playlistTrack.setDateAdded(lastUpdated);
                 playlistTrack.setTrack(track);
                 playList.setDuration(addTrackDurationToPlaylist(playList, track));
